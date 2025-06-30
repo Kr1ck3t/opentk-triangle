@@ -8,5 +8,14 @@
   <ItemGroup>
     <PackageReference Include="OpenTK" Version="4.9.4"/>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3"/>
+    <PackageReference Include="StbImageSharp" Version="2.30.15"/>
   </ItemGroup>
+  <ItemGroup>
+  <None Update="Textures/DirtTex.png">
+    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  </None>
+</ItemGroup>
+
 </Project>
+
+

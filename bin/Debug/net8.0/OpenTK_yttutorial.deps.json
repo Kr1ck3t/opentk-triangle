@@ -9,7 +9,8 @@
       "OpenTK_yttutorial/1.0.0": {
         "dependencies": {
           "Newtonsoft.Json": "13.0.3",
-          "OpenTK": "4.9.4"
+          "OpenTK": "4.9.4",
+          "StbImageSharp": "2.30.15"
         },
         "runtime": {
           "OpenTK_yttutorial.dll": {}
@@ -162,6 +163,14 @@
           }
         }
       },
+      "StbImageSharp/2.30.15": {
+        "runtime": {
+          "lib/netstandard2.0/StbImageSharp.dll": {
+            "assemblyVersion": "2.30.15.0",
+            "fileVersion": "2.30.15.0"
+          }
+        }
+      },
       "System.Runtime.CompilerServices.Unsafe/6.0.0": {}
     }
   },
@@ -254,6 +263,13 @@
       "sha512": "sha512-wNlxnPrD7veMV8EGTTi/sCDeg5V8w/18vC0aw0Ao69eNneD7YSq9Ad+C389rVA957eHNR6Xieu/5qzHQeEOyxQ==",
       "path": "opentk.windowing.graphicslibraryframework/4.9.4",
       "hashPath": "opentk.windowing.graphicslibraryframework.4.9.4.nupkg.sha512"
+    },
+    "StbImageSharp/2.30.15": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-7QqbupVhz2kcFUPTgMw4iHR9rYDHGundzzee19Mwmd1typ2Lnv8EVJcLJxlkeBM2+4ex0NwsMtdbGSJctp1XCQ==",
+      "path": "stbimagesharp/2.30.15",
+      "hashPath": "stbimagesharp.2.30.15.nupkg.sha512"
     },
     "System.Runtime.CompilerServices.Unsafe/6.0.0": {
       "type": "package",
