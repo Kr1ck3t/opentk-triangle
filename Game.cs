@@ -9,6 +9,8 @@ using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 using StbImageSharp;
+using CameraNamespace;
+using OpenTK_yttutorial.Graphics;
 
 
 
@@ -18,6 +20,8 @@ namespace OpenTK_yttutorial
     {
         // Verticies for the triangle
         // These are the positions of the vertices in 3D space
+
+        Camera camera;
 
         List<Vector3> vertices = new List<Vector3>()
         {   
@@ -89,7 +93,7 @@ namespace OpenTK_yttutorial
             new Vector2(0f, 0f), // bottom left vertex  - 3
         };
 
-        uint[] indices =
+        List<uint> indices = new List<uint>
         {
             //top face
             //top triangle
@@ -114,19 +118,16 @@ namespace OpenTK_yttutorial
         };
 
         // reder pipeline vars
-        int vao;
-        int shaderProgram;
-
-        int vbo;
-        int textureVBO;
-        int ebo;
-        int TextureId;
+        VAO vao;
+        IBO ibo;
+        ShaderProgram program;
+        Texture texture;
 
         // transformation variables
 
         float yrot = 0f;
-        float xrot = 0f;
-        float zrot = 0f;
+        //float xrot = 0f;
+        //float zrot = 0f;
 
 
         int width, height;
@@ -151,112 +152,36 @@ namespace OpenTK_yttutorial
         protected override void OnLoad()
         {
             base.OnLoad();
-            // Generate the vbo
-            vao = GL.GenVertexArray();
 
-            // Bind the vao
-            GL.BindVertexArray(vao);
+            vao = new VAO();
 
-            // --- Verticies vbo ----
+            VBO vbo = new VBO(vertices);
+            vao.LinkToVAO(0, 3, vbo);
+            VBO uvVBO = new VBO(texCoords);
+            vao.LinkToVAO(1, 2, uvVBO);
 
-            //generate a buffer
-            vbo = GL.GenBuffer();
-            //bine the buffer as an array buffer
-            GL.BindBuffer(BufferTarget.ArrayBuffer, vbo);
-            //store data in the vbo
-            GL.BufferData(BufferTarget.ArrayBuffer, vertices.Count * Vector3.SizeInBytes, vertices.ToArray(), BufferUsageHint.StaticDraw);
+            ibo = new IBO(indices);
 
+            program = new ShaderProgram("Default.vert", "Default.frag");
 
-            //put vertex vbo in slot 0
+            texture = new Texture("DirtTex.png");
 
-            //point slot 0 of the vao to the currently bound vbo
-            GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 0, 0);
-            // enable to slot
-            GL.EnableVertexArrayAttrib(vao, 0);
-
-            GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
-
-            // --- Texture vbo ---
-            textureVBO = GL.GenBuffer();
-            GL.BindBuffer(BufferTarget.ArrayBuffer, textureVBO);
-            GL.BufferData(BufferTarget.ArrayBuffer, texCoords.Count * Vector2.SizeInBytes, texCoords.ToArray(), BufferUsageHint.StaticDraw);
-
-            GL.VertexAttribPointer(1, 2, VertexAttribPointerType.Float, false, 0, 0);
-            GL.EnableVertexAttribArray(1);
-
-
-            GL.BindBuffer(BufferTarget.ArrayBuffer, 0); //this is to unbind the vbo
-
-
-            ebo = GL.GenBuffer();
-            GL.BindBuffer(BufferTarget.ElementArrayBuffer, ebo);
-            GL.BufferData(BufferTarget.ElementArrayBuffer, indices.Length * sizeof(uint), indices, BufferUsageHint.StaticDraw);
-
-            GL.BindVertexArray(0);
-
-            GL.BindBuffer(BufferTarget.ElementArrayBuffer, 0);
-
-            // Create teh shader program
-
-            shaderProgram = GL.CreateProgram();
-
-            int vertexShader = GL.CreateShader(ShaderType.VertexShader);
-            GL.ShaderSource(vertexShader, LoadShaderSource("Default.vert"));
-            GL.CompileShader(vertexShader);
-
-            int fragmentShader = GL.CreateShader(ShaderType.FragmentShader);
-            GL.ShaderSource(fragmentShader, LoadShaderSource("Default.frag"));
-            GL.CompileShader(fragmentShader);
-
-            GL.AttachShader(shaderProgram, vertexShader);
-            GL.AttachShader(shaderProgram, fragmentShader);
-
-            GL.LinkProgram(shaderProgram);
-
-            //Delete teh shaders (good practice]
-            GL.DeleteShader(vertexShader);
-            GL.DeleteShader(fragmentShader);
-
-            // Set the uniform for the texture unit
-            GL.UseProgram(shaderProgram);
-            int texLocation = GL.GetUniformLocation(shaderProgram, "Tex0");
-            GL.Uniform1(texLocation, 0); // Texture unit 0
-
-
-            // Textures
-            TextureId = GL.GenTexture();
-            //active the texture in the unit
-            GL.ActiveTexture(TextureUnit.Texture0);
-            GL.BindTexture(TextureTarget.Texture2D, TextureId);
-
-            // texture parameteres
-
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.Repeat);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.Repeat);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
-
-            // load image
-            StbImage.stbi_set_flip_vertically_on_load(1);
-            ImageResult dirtTexture = ImageResult.FromStream(File.OpenRead("../../../Textures/DirtTex.png"), ColorComponents.RedGreenBlueAlpha);
-
-            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, dirtTexture.Width, dirtTexture.Height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, dirtTexture.Data);
-
-            // unbind texture
-            GL.BindTexture(TextureTarget.Texture2D, 0);
-
+                        
             GL.Enable(EnableCap.DepthTest);
+
+            camera = new Camera(width, height, Vector3.Zero);
+            CursorState = CursorState.Grabbed;
         }
 
         protected override void OnUnload()
         {
             base.OnUnload();
 
-            GL.DeleteVertexArray(vao);
-            GL.DeleteBuffer(vbo);
-            GL.DeleteBuffer(ebo);
-            GL.DeleteTexture(TextureId);
-            GL.DeleteProgram(shaderProgram);
+            vao.delete();
+            ibo.delete();
+            program.Delete();
+            texture.Delete();
+
         }
 
 
@@ -268,18 +193,16 @@ namespace OpenTK_yttutorial
             // Fill the screen with the color
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-            // draw our triangle
-            GL.UseProgram(shaderProgram); // bind vao
-            GL.BindVertexArray(vao); // use shader program
-            GL.BindBuffer(BufferTarget.ElementArrayBuffer, ebo);
 
-            GL.BindTexture(TextureTarget.Texture2D, TextureId);
-
+            program.Bind();
+            vao.Bind();
+            texture.Bind();
+            ibo.Bind();
 
             // transformation matrices
             Matrix4 model = Matrix4.Identity;
-            Matrix4 view = Matrix4.Identity;
-            Matrix4 projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(60.0f), width/(float)height, 0.1f, 100.0f);
+            Matrix4 view = camera.GetViewMatrix();
+            Matrix4 projection = camera.GetProjectionMatrix();
 
             
             model = Matrix4.CreateRotationY(yrot);
@@ -289,15 +212,19 @@ namespace OpenTK_yttutorial
 
             model *= translation;
 
-            int modelLocation = GL.GetUniformLocation(shaderProgram, "model");
-            int viewLocation = GL.GetUniformLocation(shaderProgram, "view");
-            int projectionLocation = GL.GetUniformLocation(shaderProgram, "projection");
+            int modelLocation = GL.GetUniformLocation(program.ID, "model");
+            int viewLocation = GL.GetUniformLocation(program.ID, "view");
+            int projectionLocation = GL.GetUniformLocation(program.ID, "projection");
 
             GL.UniformMatrix4(modelLocation, true, ref model);
             GL.UniformMatrix4(viewLocation, true, ref view);
             GL.UniformMatrix4(projectionLocation, true, ref projection);
 
-            GL.DrawElements(PrimitiveType.Triangles, indices.Length, DrawElementsType.UnsignedInt, 0);
+            GL.DrawElements(PrimitiveType.Triangles, indices.Count, DrawElementsType.UnsignedInt, 0);
+
+            model += Matrix4.CreateTranslation(new Vector3(2f, 0f, 0f));
+            GL.UniformMatrix4(modelLocation, true, ref model);
+            GL.DrawElements(PrimitiveType.Triangles, indices.Count, DrawElementsType.UnsignedInt, 0);
             //GL.DrawArrays(PrimitiveType.Triangles, 0, 3); // draw the triangle | args = Primitive type, first vertex, last vertex
 
 
@@ -309,35 +236,13 @@ namespace OpenTK_yttutorial
 
         protected override void OnUpdateFrame(FrameEventArgs args)
         {
+            MouseState mouse = MouseState;
+            KeyboardState input = KeyboardState;
+
             base.OnUpdateFrame(args);
+            camera.Update(input, mouse, args);
 
         }
-
-
-        //Function to load text file adn return content as string
-
-        public static string LoadShaderSource(string filePath)
-        {
-            string shaderSource = "";
-
-            try
-            {
-                using (StreamReader reader = new StreamReader("../../../shaders/" + filePath))
-                {
-                    shaderSource = reader.ReadToEnd();
-                }
-                //Console.WriteLine("problem area");
-                //Console.WriteLine(shaderSource);
-
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("Failed to load sahder source file: " + e.Message);
-            }
-
-            return shaderSource;
-
-        }
-
+        
     }
 }

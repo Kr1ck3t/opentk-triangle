@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("OpenTK_yttutorial")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5ffd1ab901acc5fe79df5061b66192a2d3d05934")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3798d8c3c06ea2ed86968dc0c44b68409a726930")]
 [assembly: System.Reflection.AssemblyProductAttribute("OpenTK_yttutorial")]
 [assembly: System.Reflection.AssemblyTitleAttribute("OpenTK_yttutorial")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

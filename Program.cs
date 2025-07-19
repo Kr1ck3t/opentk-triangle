@@ -1,12 +1,22 @@
-﻿namespace OpenTK_yttutorial;
+﻿using System;
+
+
+namespace OpenTK_yttutorial;
 
 class Program
 {
     static void Main(string[] args)
     {
-        using (Game newGame = new Game(500, 500))
+        try
+    {
+        using (Game game = new Game(800, 600))
         {
-            newGame.Run();
+            game.Run();
         }
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Unhandled exception: {ex.Message}");
+    }
     }
 }
