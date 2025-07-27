@@ -32,3 +32,4 @@
 /home/andrew/C#-Projects/learning c#/2025 projects/OpenTK_yttutorial/OpenTK_yttutorial/obj/Debug/net8.0/OpenTK_yttutorial.sourcelink.json
 /home/andrew/C#-Projects/learning c#/2025 projects/OpenTK_yttutorial/OpenTK_yttutorial/bin/Debug/net8.0/StbImageSharp.dll
 /home/andrew/C#-Projects/learning c#/2025 projects/OpenTK_yttutorial/OpenTK_yttutorial/bin/Debug/net8.0/Textures/DirtTex.png
+/home/andrew/C#-Projects/learning c#/2025 projects/OpenTK_yttutorial/OpenTK_yttutorial/bin/Debug/net8.0/SimplexNoise.dll

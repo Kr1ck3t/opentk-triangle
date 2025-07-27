@@ -10,6 +10,7 @@
         "dependencies": {
           "Newtonsoft.Json": "13.0.3",
           "OpenTK": "4.9.4",
+          "SimplexNoise": "2.0.0",
           "StbImageSharp": "2.30.15"
         },
         "runtime": {
@@ -163,6 +164,14 @@
           }
         }
       },
+      "SimplexNoise/2.0.0": {
+        "runtime": {
+          "lib/netcoreapp2.2/SimplexNoise.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
       "StbImageSharp/2.30.15": {
         "runtime": {
           "lib/netstandard2.0/StbImageSharp.dll": {
@@ -263,6 +272,13 @@
       "sha512": "sha512-wNlxnPrD7veMV8EGTTi/sCDeg5V8w/18vC0aw0Ao69eNneD7YSq9Ad+C389rVA957eHNR6Xieu/5qzHQeEOyxQ==",
       "path": "opentk.windowing.graphicslibraryframework/4.9.4",
       "hashPath": "opentk.windowing.graphicslibraryframework.4.9.4.nupkg.sha512"
+    },
+    "SimplexNoise/2.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-v9q0D/5PSUx3T8ZIixjDEGlLYIDhkTbeQOgz/SddoKw16aoz4LFlg7FTu9DD0304p2m9VsHfTmygCgZ2FzIDVw==",
+      "path": "simplexnoise/2.0.0",
+      "hashPath": "simplexnoise.2.0.0.nupkg.sha512"
     },
     "StbImageSharp/2.30.15": {
       "type": "package",
